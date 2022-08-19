@@ -6,15 +6,27 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "moralis:sync0": "frp/frpc.exe -c frp/frpc.ini",
+    "moralis:sync": "moralis-admin-cli connect-local-devchain --chain hardhat --moralisSubdomain i0iqvpzqssys.usemoralis.com --frpcPath ./frp/frpc",
+    "moralis:cloud": "moralis-admin-cli watch-cloud-folder --moralisSubdomain i0iqvpzqssys.usemoralis.com --autoSave 1 --moralisCloudfolder ./cloudFunctions"
   },
   "dependencies": {
-    "next": "12.2.4",
-    "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "@fortawesome/fontawesome-svg-core": "^6.1.2",
+    "@fortawesome/free-solid-svg-icons": "^6.1.2",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@walletconnect/web3-provider": "^1.7.8",
+    "@web3auth/web3auth": "^1.1.0",
+    "magic-sdk": "^8.1.1",
+    "moralis": "^1.8.1",
+    "next": "12.2.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-moralis": "1.3.5",
+    "web3uikit": "^0.1.163"
   },
   "devDependencies": {
-    "eslint": "8.21.0",
-    "eslint-config-next": "12.2.4"
+    "dotenv": "^16.0.1",
+    "prettier": "^2.7.1"
   }
 }

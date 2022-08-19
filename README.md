@@ -1,3 +1,30 @@
+<div align="center">
+ <h2 align="center">NFT Marketplace</h2>
+  <p align="center">
+    Buy and sell NFTs over Ethereum network.
+    <br />
+    <a href="https://github.com/neeyno/hardhat_nft_marketplace" target="_blank" >
+      <strong>| Explore Smart Contract </strong>
+    </a>
+    <a  href="https://github.com/neeyno/nextjs-nft-marketplace" target="_blank">
+    <strong>| Explore Frontend |</strong>
+    </a>
+    <br />
+    <a  href="https://github.com" target="_blank"><strong>| View DEMO |</strong></a>
+ </p>
+</div>
+<hr>
+
+### Description
+This repository contains frontend part of NFT Marketplace Dapp.
+
+Home page shows recently listed NFTs.
+NFT owners able to sell and update thier items
+And any user able to buy an NFT
+
+Sell page allows users to list thier NFT on the marketplace
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started

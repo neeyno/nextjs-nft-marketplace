@@ -1,0 +1,16 @@
+.update {
+    position: relative;
+    display: flex;
+    margin: 100px auto;
+    width: 90%;
+    max-width: 400px;
+    height: 330px ;  
+    background-color: #22262b;
+    border-radius: 1px;
+    color: #ffffff;
+    transition: color 0.15s ease,background-color 0.15s ease;
+}
+
+.box {
+    color: #ffffff;
+}
