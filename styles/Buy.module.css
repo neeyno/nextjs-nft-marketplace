@@ -1,4 +1,4 @@
-.update {
+.buy_layout {
     position: relative;
     display: block;
     margin: 100px auto;
@@ -10,5 +10,3 @@
     color: #ffffff;
     transition: color 0.15s ease,background-color 0.15s ease;
 }
-
-

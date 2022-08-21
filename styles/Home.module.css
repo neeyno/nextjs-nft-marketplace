@@ -13,7 +13,7 @@
   max-width: 1060px;
 }
 
-.disabled {
+.notWeb3 {
   left: 50%;
   top: 40%;
   transform: translate(-50%, -50%);
@@ -23,6 +23,10 @@
   font-weight: 400;
   margin: auto;
   text-align: center;
+}
+
+#upd-input {
+  background-color: #22262b;
 }
 
 .modal {
@@ -134,3 +138,5 @@ opacity: 0.8;
     grid-template-columns: 260px;
   }
 }
+
+

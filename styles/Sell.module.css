@@ -1,0 +1,56 @@
+.container {
+    display: flex;
+    justify-content: center;
+    margin: 15px auto;
+    padding: 1rem 1rem;
+    color: #22262b;
+    background-color: #dddddf;
+    width: 98%;
+    max-width: 1060px;
+    border: 1px solid red;
+}
+
+.notWeb3 {
+    left: 50%;
+    top: 40%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    position: absolute;
+    font-size: 1.6rem;
+    font-weight: 400;
+    margin: auto;
+    text-align: center;
+}
+
+.box {    
+    border: 1px solid green;
+    width: 100%;
+    height: 100%;
+    display: inline-block;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.sell_form {
+    margin: 0 auto;
+    background-color: #22262b;
+    border-radius: 1px;
+    padding: 10px;
+    color: #ffffff;;
+    text-decoration: none;
+    transition: color 0.15s ease,background-color 0.15s ease;
+    width: 100%;
+    max-width: 500px;
+}
+
+.withdraw {
+    margin: 30px auto 0 auto;
+    background-color: #22262b;
+    border-radius: 1px;
+    padding: 10px;
+    color: #ffffff;;
+    text-decoration: none;
+    transition: color 0.15s ease,background-color 0.15s ease;
+    width: 100%;
+    max-width: 500px;
+}
