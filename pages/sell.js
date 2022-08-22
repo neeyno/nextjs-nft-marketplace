@@ -6,18 +6,20 @@ import { useNotification } from "web3uikit"
 import { ethers } from "ethers"
 
 import nftMarketplaceAbi from "../constants/NFTMarketplace.json"
-import nftSampleAbi from "../constants/BasicNFT.json"
+//import nftSampleAbi from "../constants/BasicNFT.json"
 import contractAddresses from "../constants/contractAddresses.json"
+import { getContractAbi } from "../constants/getContractAbi"
 
 //const apiKey = process.env.etherscan_apiKey
 
 export default function Sell() {
     const { isWeb3Enabled, account, chainId: chainIdHex } = useMoralis()
-    const chainId = parseInt(chainIdHex).toString()
+    const chainId = parseInt(chainIdHex).toString() || "31337"
     //parseInt(chainIdHex).toString() === "1337" ? "31337" : parseInt(chainIdHex).toString()
     const marketplaceAddress =
-        chainId in contractAddresses ? contractAddresses[chainId]["NFTMarketplace"][0] : "31337"
+        chainId in contractAddresses ? contractAddresses[chainId]["NFTMarketplace"][0] : null
 
+    const [proceeds, setProceeds] = useState("")
     const [listData, setListData] = useState({
         nftAddress: "",
         tokenId: "",
@@ -25,30 +27,11 @@ export default function Sell() {
     })
 
     const { runContractFunction } = useWeb3Contract()
-
-    // const { runContractFunction: listItem } = useWeb3Contract({
-    //     abi: nftMarketplaceAbi,
-    //     contractAddress: marketplaceAddress,
-    //     functionName: "listItem",
-    //     params: {
-    //         nftAddress: listData.nftAddress,
-    //         tokenId: listData.tokenId,
-    //         price: ethers.utils.parseEther(listData.price ? listData.price : "0"),
-    //     },
-    // })
-
-    // const { runContractFunction: approve } = useWeb3Contract({
-    //     abi: nftSampleAbi, // getContractAbi(),
-    //     contractAddress: listData.nftAddress,
-    //     functionName: "approve",
-    //     params: {
-    //         to: marketplaceAddress,
-    //         tokenId: listData.tokenId,
-    //     },
-    // })
+    const dispacth = useNotification()
 
     function handleClick(event) {
         const { name, value } = event.target
+        //name != "nftAddress" && value < 0 ? (value = "") : value
         setListData((prevData) => {
             return {
                 ...prevData,
@@ -59,7 +42,8 @@ export default function Sell() {
     }
 
     async function handleSellItemClick() {
-        const nftAbi = await getContractAbi()
+        const nftAbi = await getContractAbi(chainId)
+        console.log("Approving...")
         const approveParams = {
             abi: nftAbi,
             contractAddress: listData.nftAddress,
@@ -79,7 +63,8 @@ export default function Sell() {
     }
 
     async function handleApproveSuccess() {
-        const listItemPrams = {
+        console.log("Listing...")
+        const listItemParams = {
             abi: nftMarketplaceAbi,
             contractAddress: marketplaceAddress,
             functionName: "listItem",
@@ -91,33 +76,79 @@ export default function Sell() {
         }
 
         await runContractFunction({
-            params: listItemPrams,
-            onSuccess: () => console.log("listed"),
+            params: listItemParams,
+            onSuccess: handleListSuccess,
             onError: (error) => {
                 console.log(error)
             },
         })
     }
 
-    async function getContractAbi() {
-        let contractAbi = nftSampleAbi
-        if (chainId != "31337") {
-            const networks = {
-                1: "api", //Mainnet
-                4: "api-rinkeby",
-            }
-            const url = `https://${networks[chainId]}.etherscan.io/api?module=contract&action=getabi&address=${listData.nftAddress}` //&apikey=${apiKey}
-            await fetch(url)
-                .then((data) => {
-                    return data.json()
-                })
-                .then((response) => {
-                    contractAbi = response.result
-                })
-                .catch((error) => console.log(error))
-        }
-        return contractAbi
+    async function handleListSuccess(tx) {
+        await tx.wait(1)
+        dispacth({
+            type: "success",
+            id: "notification",
+            message: " listed successfully!",
+            title: "NFT",
+            position: "bottomR",
+        })
     }
+
+    async function handleWithdraw() {
+        const withdrawPrams = {
+            abi: nftMarketplaceAbi,
+            contractAddress: marketplaceAddress,
+            functionName: "withdrawProceeds",
+            params: {},
+        }
+
+        await runContractFunction({
+            params: withdrawPrams,
+            onSuccess: handleWithdrawSuccess,
+            onError: (error) => {
+                console.log(error)
+            },
+        })
+    }
+
+    async function handleWithdrawSuccess(tx) {
+        await tx.wait(1)
+        dispacth({
+            type: "success",
+            id: "notification",
+            message: " withdrawn successfully!",
+            title: "Proceeds ",
+            position: "bottomR",
+        })
+        await updateBalance()
+    }
+
+    async function updateBalance() {
+        const getProceedsPrams = {
+            abi: nftMarketplaceAbi,
+            contractAddress: marketplaceAddress,
+            functionName: "getProceeds",
+            params: {
+                seller: account,
+            },
+        }
+        const balance = await runContractFunction({
+            params: getProceedsPrams,
+            onSuccess: console.log("getProceeds Success"),
+            onError: (error) => {
+                console.log(error)
+            },
+        })
+        const balanceInEth = ethers.utils.formatUnits(balance, 18)
+        setProceeds(() => balanceInEth)
+    }
+
+    useEffect(() => {
+        if (isWeb3Enabled) {
+            updateBalance()
+        }
+    }, [isWeb3Enabled])
 
     return (
         <div className={styles.container}>
@@ -127,7 +158,7 @@ export default function Sell() {
                         <div>List NFT</div>
                         <input
                             id={"nftAddress"}
-                            placeholder="type NFT contract address"
+                            placeholder="0xe7f1..."
                             type="text"
                             name="nftAddress"
                             value={listData.nftAddress}
@@ -136,7 +167,8 @@ export default function Sell() {
                         <input
                             id={"tokenId"}
                             type="number"
-                            placeholder="type NFT token Id"
+                            min="0"
+                            placeholder="token Id"
                             name="tokenId"
                             value={listData.tokenId}
                             onChange={handleClick}
@@ -144,7 +176,9 @@ export default function Sell() {
                         <input
                             id={"price"}
                             type="number"
-                            placeholder="type Price Value in ETH"
+                            min="0"
+                            step="0.1"
+                            placeholder="Ether"
                             name="price"
                             value={listData.price}
                             onChange={handleClick}
@@ -155,11 +189,8 @@ export default function Sell() {
                     </div>
                     <div className={styles.withdraw}>
                         <div>Withdraw proceedes</div>
-                        <div>balance</div>
-                        <button
-                        //className={styles.close_btn}
-                        //onClick={() => runUpdate()}
-                        >
+                        <div>Your proceeds: {proceeds} Eth</div>
+                        <button className={styles.withdraw_btn} onClick={() => handleWithdraw()}>
                             Withdraw
                         </button>
                     </div>
@@ -173,3 +204,44 @@ export default function Sell() {
         </div>
     )
 }
+
+// const { runContractFunction: listItem } = useWeb3Contract({
+//     abi: nftMarketplaceAbi,
+//     contractAddress: marketplaceAddress,
+//     functionName: "listItem",
+//     params: {
+//         nftAddress: listData.nftAddress,
+//         tokenId: listData.tokenId,
+//         price: ethers.utils.parseEther(listData.price ? listData.price : "0"),
+//     },
+// })
+
+// const { runContractFunction: approve } = useWeb3Contract({
+//     abi: nftSampleAbi, // getContractAbi(),
+//     contractAddress: listData.nftAddress,
+//     functionName: "approve",
+//     params: {
+//         to: marketplaceAddress,
+//         tokenId: listData.tokenId,
+//     },
+// })
+
+// async function getContractAbi() {
+//     let contractAbi = nftSampleAbi
+//     if (chainId != "31337") {
+//         const networks = {
+//             1: "api", //Mainnet
+//             4: "api-rinkeby",
+//         }
+//         const url = `https://${networks[chainId]}.etherscan.io/api?module=contract&action=getabi&address=${listData.nftAddress}` //&apikey=${apiKey}
+//         await fetch(url)
+//             .then((data) => {
+//                 return data.json()
+//             })
+//             .then((response) => {
+//                 contractAbi = response.result
+//             })
+//             .catch((error) => console.log(error))
+//     }
+//     return contractAbi
+// }

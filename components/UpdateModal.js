@@ -14,6 +14,11 @@ export default function UpdateModal({
     //const [price, setPrice] = useState(oldPrice || "0")
     let valueToUpdate = oldPrice
 
+    function handleChange(event) {
+        const { value } = event.target
+        setPrice(() => ethers.utils.parseEther(value ? value : "0"))
+    }
+
     return (
         <div className={styles.update}>
             <div>Update price</div>
@@ -25,8 +30,10 @@ export default function UpdateModal({
             <input
                 id={"upd-input"}
                 type="number"
+                min="0"
+                name="update"
                 placeholder={oldPrice}
-                onChange={(e) => setPrice(ethers.utils.parseEther(e.target.value))}
+                onChange={handleChange}
             />
             <button className={styles.close_btn} onClick={() => runUpdate()}>
                 Update

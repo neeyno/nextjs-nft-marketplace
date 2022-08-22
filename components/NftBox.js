@@ -36,8 +36,8 @@ export default function NftBox({ price, nftAddress, tokenId, marketplaceAddress,
         dispacth({
             type: "success",
             id: "notification",
-            message: "Price updated successfully",
-            title: "Price updated!",
+            message: " updated!",
+            title: "Price.",
             position: "bottomR",
         })
         setOpenUpdModal(false)
@@ -48,7 +48,7 @@ export default function NftBox({ price, nftAddress, tokenId, marketplaceAddress,
             type: "success",
             id: "notification",
             message: "You've bought NFT successfully!",
-            title: "NFT buy!",
+            title: "NFT ",
             position: "bottomR",
         })
         setOpenBuyModal(false)
