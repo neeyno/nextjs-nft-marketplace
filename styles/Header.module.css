@@ -28,10 +28,9 @@
 
 .title {
     margin: auto auto auto 20px;
-    
     font-size: 1.61rem;
     letter-spacing: 0.09em;
-    color: #b02fde;
+    color: #74328a;
     font-family: 'Exo-2', 'Helvetica Neue', sans-serif;
     font-weight: 300;
 }
@@ -64,7 +63,7 @@
 
 .sell:hover,
 .home:hover {
-  background-color: #8a8b8c;
+  background-color: #383c40;
       color: #ffffff;
 }
 
@@ -90,7 +89,7 @@
       transition: color 0.15s ease,background-color 0.15s ease;
     }
     .popup_box:hover {
-      background-color: #8a8b8c;
+      background-color: #383c40;
       color: #ffffff;
     }
 
@@ -125,7 +124,7 @@
     }
     .home_m:hover,
     .sell_m:hover{
-      background-color: #8a8b8c;
+      background-color: #383c40;
       color: #ffffff;
     }
 

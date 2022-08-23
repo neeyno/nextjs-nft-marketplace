@@ -16,28 +16,45 @@ export default function UpdateModal({
 
     function handleChange(event) {
         const { value } = event.target
-        setPrice(() => ethers.utils.parseEther(value ? value : "0"))
+        setPrice(() => ethers.utils.parseEther(value && value.length < 20 ? value : "0"))
     }
 
     return (
         <div className={styles.update}>
-            <div>Update price</div>
-            <button className={styles.close_btn} onClick={() => closeModal(false)}>
-                X
-            </button>
-            <div>{nftAddress}</div>
-            <div>{tokenId}</div>
-            <input
-                id={"upd-input"}
-                type="number"
-                min="0"
-                name="update"
-                placeholder={oldPrice}
-                onChange={handleChange}
-            />
-            <button className={styles.close_btn} onClick={() => runUpdate()}>
-                Update
-            </button>
+            <div className={styles.head}>
+                <div className={styles.title}>New listing price</div>
+                <button className={styles.close_btn} onClick={() => closeModal(false)}>
+                    X
+                </button>
+            </div>
+            <div className={styles.main}>
+                <div className={styles.nftAddress}>
+                    <div>NFT contract address</div>
+                    <span>{nftAddress}</span>
+                </div>
+
+                <div className={styles.tokenId}>
+                    <div>Token ID</div>
+                    <span>{tokenId}</span>
+                </div>
+                <div className={styles.price_input}>
+                    <div>New price</div>
+                    <input
+                        id={"upd-input"}
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        name="update"
+                        placeholder={oldPrice}
+                        onChange={handleChange}
+                    />
+                    <label>Eth</label>
+                </div>
+                <hr />
+                <button className={styles.update_btn} onClick={() => runUpdate()}>
+                    Update price
+                </button>
+            </div>
         </div>
     )
 }

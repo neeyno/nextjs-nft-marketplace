@@ -42,7 +42,7 @@ export default function Sell() {
     }
 
     async function handleSellItemClick() {
-        const nftAbi = await getContractAbi(chainId)
+        const nftAbi = await getContractAbi(chainId, listData.nftAddress)
         console.log("Approving...")
         const approveParams = {
             abi: nftAbi,
@@ -155,44 +155,80 @@ export default function Sell() {
             {isWeb3Enabled ? (
                 <div className={styles.box}>
                     <div className={styles.sell_form}>
-                        <div>List NFT</div>
-                        <input
-                            id={"nftAddress"}
-                            placeholder="0xe7f1..."
-                            type="text"
-                            name="nftAddress"
-                            value={listData.nftAddress}
-                            onChange={handleClick}
-                        />
-                        <input
-                            id={"tokenId"}
-                            type="number"
-                            min="0"
-                            placeholder="token Id"
-                            name="tokenId"
-                            value={listData.tokenId}
-                            onChange={handleClick}
-                        />
-                        <input
-                            id={"price"}
-                            type="number"
-                            min="0"
-                            step="0.1"
-                            placeholder="Ether"
-                            name="price"
-                            value={listData.price}
-                            onChange={handleClick}
-                        />
-                        <button className={styles.list_btn} onClick={() => handleSellItemClick()}>
-                            Sell NFT
-                        </button>
+                        <div className={styles.head}>
+                            <div>Sell NFT</div>
+                        </div>
+                        <div className={styles.main}>
+                            <div>1. Approve token to the marketpalce </div>
+                            <div className={styles.approve}>
+                                <div>Marketpalce contract address</div>
+                                <span>{marketplaceAddress}</span>
+                            </div>
+                            <hr />
+                            <div>2. Specify listing requirements</div>
+                            <div className={styles.nftAddress}>
+                                <div>NFT contract address</div>
+                                <input
+                                    id={"nftAddress"}
+                                    placeholder="0xe7f1..."
+                                    type="text"
+                                    name="nftAddress"
+                                    value={listData.nftAddress}
+                                    onChange={handleClick}
+                                />
+                            </div>
+                            <div className={styles.tokenId}>
+                                <div>Token ID</div>
+                                <input
+                                    id={"tokenId"}
+                                    type="number"
+                                    min="0"
+                                    placeholder="0"
+                                    name="tokenId"
+                                    value={listData.tokenId}
+                                    onChange={handleClick}
+                                />
+                            </div>
+                            <div className={styles.price_input}>
+                                <div>Price in Eth</div>
+                                <input
+                                    id={"price"}
+                                    type="number"
+                                    min="0"
+                                    step="0.1"
+                                    placeholder="0.0"
+                                    name="price"
+                                    value={listData.price}
+                                    onChange={handleClick}
+                                />
+                                <label>Eth</label>
+                            </div>
+                            <hr />
+                            <button
+                                className={styles.sell_btn}
+                                onClick={() => handleSellItemClick()}
+                            >
+                                Approve and List
+                            </button>
+                        </div>
                     </div>
                     <div className={styles.withdraw}>
-                        <div>Withdraw proceedes</div>
-                        <div>Your proceeds: {proceeds} Eth</div>
-                        <button className={styles.withdraw_btn} onClick={() => handleWithdraw()}>
-                            Withdraw
-                        </button>
+                        <div className={styles.head}>
+                            <div>Withdraw proceeds</div>
+                        </div>
+                        <div className={styles.main}>
+                            <div className={styles.proceeds}>
+                                <div>Your current proceeds</div>
+                                <span> {proceeds} Eth</span>
+                            </div>
+                            <hr />
+                            <button
+                                className={styles.withdraw_btn}
+                                onClick={() => handleWithdraw()}
+                            >
+                                Withdraw
+                            </button>
+                        </div>
                     </div>
                 </div>
             ) : (
